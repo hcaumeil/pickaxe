@@ -1,0 +1,18 @@
+require github [ user='xorg62' ]
+
+SUMMARY="Ncurses tty clock"
+LICENCES="BSD-3"
+SLOT="0"
+MYOPTIONS=""
+
+PLATFORMS="~amd64"
+
+DEPENDENCIES="
+    build+run:
+        sys-libs/ncurses
+"
+
+src_install() {
+    dobin ${PN}
+    doman ${PN}.1
+}

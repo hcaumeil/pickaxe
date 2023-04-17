@@ -1,0 +1,11 @@
+require helix
+
+# Forcing download link
+DOWNLOADS="https://github.com/helix-editor/${PN}.git"
+
+src_unpack() {
+    # Forcing cargo exlib unpack function
+    cargo_src_unpack
+}
+
+PLATFORMS="~amd64"

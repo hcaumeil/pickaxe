@@ -1,0 +1,28 @@
+require github [ user='Hummer12007' ]
+
+PLATFORMS="~amd64"
+
+SUMMARY="A program to read and control device brightness."
+LICENCES="MIT"
+SLOT="0"
+MYOPTIONS="
+	systemd
+	udev
+"
+
+DEPENDENCIES="
+	run:
+		systemd? ( sys-apps/systemd )
+"
+
+src_install() {
+    if optionq udev; then
+    	if optionq systemd; then
+			emake PREFIX="/usr/$(exhost --target)" DESTDIR="${IMAGE}" INSTALL_UDEV_RULES=0 install
+		else
+			emake PREFIX="/usr/$(exhost --target)" DESTDIR="${IMAGE}" INSTALL_UDEV_RULES=1 install
+		fi
+	else 
+		emake PREFIX="/usr/$(exhost --target)" DESTDIR="${IMAGE}" INSTALL_UDEV_RULES=0 install
+	fi
+}

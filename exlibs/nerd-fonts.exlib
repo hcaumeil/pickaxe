@@ -1,0 +1,28 @@
+# The package should be named nerd-fonts-FONT
+# So the font name need to be taken for install
+FONT=${PN#"nerd-fonts-"}
+
+require github [ user='ryanoasis' project='nerd-fonts' release=v${PV} pnv=${FONT} suffix='zip' ] xfont
+
+export_exlib_phases src_prepare src_install
+
+SUMMARY="The iconic ${FONT} nerd font (with a high number of glyphs/icons)"
+HOMEPAGE="https://www.nerdfonts.com/"
+LICENCES="OFL-SIL"
+SLOT="0"
+
+# Because github exlib overide it
+WORK="${WORKBASE}"
+
+DEPENDENCIES=""
+
+nerd-fonts_src_prepare() {
+	rm -f *"Windows Compatible"*
+}
+
+nerd-fonts_src_install() {
+	dodir /usr/share/fonts/X11/${FONT}NerdFont/
+	insinto /usr/share/fonts/X11/${FONT}NerdFont/
+	nonfatal doins *.ttf
+	nonfatal doins *.otf
+}

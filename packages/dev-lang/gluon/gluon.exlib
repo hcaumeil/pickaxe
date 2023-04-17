@@ -1,0 +1,20 @@
+require cargo github [ user='gluon-lang' ]
+
+export_exlib_phases src_compile src_install
+
+SUMMARY="Gluon is a small, statically-typed, functional programming language designed for application embedding."
+LICENCES="MIT"
+SLOT="0"
+MYOPTIONS=""
+
+DEPENDENCIES=""
+
+gluon_src_compile() {
+	cd repl/
+	cargo_src_compile
+	cd ..
+}
+
+gluon_src_install() {
+	dobin target/release/gluon
+}

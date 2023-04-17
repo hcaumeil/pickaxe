@@ -1,0 +1,20 @@
+require meson
+
+PLATFORMS="~amd64 ~arm ~armv8 ~x86"
+
+HOMEPAGE="https://hg.sr.ht/~scoopta/wofi"
+DOWNLOADS="${HOMEPAGE}/archive/v${PV}.tar.gz"
+SUMMARY="A launcher/menu program for wlroots based wayland compositors such as sway"
+LICENCES="GPL-3"
+SLOT="0"
+
+DEPENDENCIES="
+    build+run:
+        sys-libs/wayland
+        x11-libs/gtk
+"
+
+src_prepare() {
+    MESON_SOURCE="${WORKBASE}/${PN}-v${PV}"
+    meson_src_prepare
+}

@@ -1,0 +1,39 @@
+require bash-completion zsh-completion
+require cargo github [ user='casey' ]
+
+export_exlib_phases src_install
+
+SUMMARY="A handy way to save and run project-specific commands."
+DESCRIPTION="
+just is an improvement of make, written in Rust.
+Like with make, you write recipes that are stored in a file called justfile.
+just has a ton of useful features, like sub-directory call, command line argument for recipes,
+recipes listing, multi-languages intructions, .env file loading...
+"
+LICENCES="CC0"
+SLOT="0"
+MYOPTIONS="
+    fish-completion [[ description = [ Install completion files for the fish shell ] ]]
+"
+
+DEPENDENCIES=""
+
+BASH_COMPLETIONS=(
+    "completions/${PN}.bash _${PN}"
+)
+
+ZSH_COMPLETIONS=(
+    "completions/${PN}.zsh _${PN}"
+)
+
+just_src_install() {
+    cargo_src_install
+
+    bash-completion_src_install
+    zsh-completion_src_install
+
+    if optionq fish-completion; then
+        insinto /usr/share/fish/vendor_completions.d/
+        doins completions/${PN}.fish
+    fi
+}

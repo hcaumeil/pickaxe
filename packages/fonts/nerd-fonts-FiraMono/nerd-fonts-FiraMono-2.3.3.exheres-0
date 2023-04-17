@@ -1,0 +1,7 @@
+require nerd-fonts
+
+PLATFORMS="~amd64 ~arm ~armv8 ~x86"
+
+pkg_postinst() {
+    einfo "To comply whith SIL Open Font License (OFL), the fonts file are named Fura Mono Nerd Font"
+}
