@@ -1,3 +1,5 @@
 require helix
 
+DOWNLOADS="https://github.com/helix-editor/${PN}/releases/download/${PV}/${PNV}-source.tar.xz"
+WORK=${WORKBASE}
 PLATFORMS="~amd64"

@@ -1,7 +1,7 @@
 require bash-completion zsh-completion
-require cargo github [ user='helix-editor' ]
+require cargo
 
-export_exlib_phases src_compile src_install pkg_prerm pkg_postinst
+export_exlib_phases src_install pkg_postinst
 
 SUMMARY="A Kakoune / Neovim inspired editor, written in Rust."
 HOMEPAGE="https://helix-editor.com/"
@@ -28,33 +28,35 @@ ZSH_COMPLETIONS=(
     "contrib/completion/hx.zsh _hx"
 )
 
-RUNTIME_DIR=(
-    "/var/lib/helix"
-)
-
-RUNTIME_PATH=(
-    "${RUNTIME_DIR}/runtime"
-)
-
-BIN_PATH=(
+HELIX_DIR=(
     "/usr/$(exhost --target)/lib/helix"
+)
+
+HELIX_RUNTIME=(
+    "${HELIX_DIR}/runtime"
 )
 
 COMPILED_BIN=(
     "target/release/hx"
 )
 
-helix_src_compile() {
-    # Disable grammar fetch and build during compilation, this will be done later
-    HELIX_DISABLE_AUTO_GRAMMAR_BUILD=1 \
-        cargo_src_compile
-}
-
 helix_src_install() {
     ebegin "Installing binary"
-    dodir ${BIN_PATH}
-    exeinto ${BIN_PATH}
+    dodir ${HELIX_DIR}
+    exeinto ${HELIX_DIR}
     doexe ${COMPILED_BIN}
+    eend
+
+    # Installing helix runtime (helix tutor, color themes, tree-sitter queries, tree-sitter grammars)
+    ebegin "Installing runtime"
+    dodir ${HELIX_RUNTIME}
+    insinto ${HELIX_RUNTIME}
+    doins -r runtime/queries
+    doins -r runtime/themes
+    doins runtime/tutor
+    dodir ${HELIX_RUNTIME}/grammars
+    insinto ${HELIX_RUNTIME}/grammars
+    doins -r runtime/grammars/*.so
     eend
 
     bash-completion_src_install
@@ -75,40 +77,9 @@ helix_src_install() {
         insinto /usr/share/pixmaps
         newins logo.svg Helix.svg
     fi
-
-    # Installing helix runtime (helix tutor, color themes, tree-sitter queries, tree-sitter grammars)
-    ebegin "Installing runtime"
-    dodir ${RUNTIME_DIR}
-    insinto ${RUNTIME_DIR}
-    doins -r runtime
-    eend
-
-    # Helix needs to know where is its runtime to work properly 
-    # Installing a sh script to set the environnement variable HELIX_RUNTIME globaly 
-    ebegin "Setting HELIX_RUNTIME environnment variable"
-    dobin ${FILES}/hx
-    eend
-
-    # Helix syntax highlighting work with tree sitter
-    # Tree-sitter grammars (language parsers) are C files that need to be fetch and build
-    # Every fetch or build files will be located in the HELIX_RUNTIME/grammars directory
-    ebegin "Fetching and building grammars"
-    dodir ${RUNTIME_PATH}/grammars
-    esandbox disable_net
-    ${COMPILED_BIN} --grammar fetch
-    esandbox enable_net
-    ${COMPILED_BIN} --grammar build
-    insinto ${RUNTIME_PATH}/grammars
-    doins -r ${TEMP}/.config/helix/runtime/grammars/*.so
-    rm -fr ${TEMP}/.config/
-    eend
-}
-
-helix_pkg_prerm() {
-    # The user is able to fetch himself the grammars, but may forget to erase the sources files
-    rm -fr ${RUNTIME_PATH}/grammars/sources
 }
 
 helix_pkg_postinst() {
+    ln -s ${HELIX_DIR}/hx "${ROOT}"/usr/$(exhost --target)/bin/hx
     einfo "Helix binary is hx"
 }

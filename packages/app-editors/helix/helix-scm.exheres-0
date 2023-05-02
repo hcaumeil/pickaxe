@@ -1,11 +1,14 @@
-require helix
+require helix github [ user="helix-editor" force_git_clone=true ]
 
-# Forcing download link
 DOWNLOADS="https://github.com/helix-editor/${PN}.git"
 
 src_unpack() {
-    # Forcing cargo exlib unpack function
     cargo_src_unpack
+    
+    # Tree-sitter grammars (language parsers) are C files that need to be fetch.
+    esandbox disable_net
+    cargo run --package=helix-loader --bin=hx-loader
+    esandbox enable_net
 }
 
 PLATFORMS="~amd64"
