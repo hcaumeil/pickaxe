@@ -18,3 +18,17 @@ src_prepare() {
     MESON_SOURCE="${WORKBASE}/${PN}-v${PV}"
     meson_src_prepare
 }
+
+pkg_postinst() {
+        einfo ""
+        einfo "wofi use Gnome GIO lib to open terminal in drun mode."
+        einfo "Since version 2.76.2, GIO has a list of hardcoded terminal emulators :"
+        einfo "https://gitlab.gnome.org/GNOME/glib/-/blob/2.76.2/gio/gdesktopappinfo.c?ref_type=tags#L2701-2713"
+        einfo ""
+        einfo "As a workaround, you can :"
+        einfo "- use xdg-terminal-exec" 
+        einfo "- do a symlink : ln -s /usr/bin/myterm /usr/bin/xdg-terminal-exec"
+        einfo ""
+        einfo "Using gsettings or dconf will not work."
+}
+
