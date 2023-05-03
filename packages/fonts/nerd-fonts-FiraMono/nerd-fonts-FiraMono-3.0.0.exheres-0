@@ -1,0 +1,7 @@
+require nerd-fonts
+
+PLATFORMS="~amd64 ~arm ~armv8 ~x86"
+
+pkg_postinst() {
+    einfo "The fonts file were named Fura Mono Nerd Font, they are now named Fira Mono Nerd Font."
+}
