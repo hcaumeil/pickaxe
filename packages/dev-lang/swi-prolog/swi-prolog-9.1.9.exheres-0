@@ -1,0 +1,23 @@
+require cmake
+
+DOWNLOADS="https://www.swi-prolog.org/download/devel/src/swipl-${PV}.tar.gz"
+
+SUMMARY="SWI-Prolog offers a comprehensive Free Software Prolog environment"
+HOMEPAGE="https://www.swi-prolog.org/"
+HOME
+LICENCES="BSD-3"
+SLOT="0"
+MYOPTIONS=""
+
+PLATFORMS="~amd64"
+
+DEPENDENCIES="
+	sys-libs/ncurses
+	sys-libs/zlib
+"
+
+src_prepare() {
+    CMAKE_SOURCE="${WORKBASE}/swipl-${PV}"
+    cmake_src_prepare
+}
+
