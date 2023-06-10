@@ -1,0 +1,5 @@
+GITHUB_TAG="v${PV}"
+
+require gitui
+
+PLATFORMS="~amd64"

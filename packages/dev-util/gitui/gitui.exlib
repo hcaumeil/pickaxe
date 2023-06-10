@@ -1,0 +1,10 @@
+require cargo github [ user='extrawurst' ]
+
+SUMMARY="Text-mode interface for git, written in rust"
+LICENCES="CC0"
+SLOT="0"
+MYOPTIONS=""
+
+DEPENDENCIES="
+	dev-libs/openssl
+"

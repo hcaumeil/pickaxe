@@ -1,0 +1,11 @@
+require gitui
+
+# Forcing download link
+DOWNLOADS="https://github.com/extrawurst/${PN}.git"
+
+src_unpack() {
+    # Forcing cargo exlib unpack function
+    cargo_src_unpack
+}
+
+PLATFORMS="~amd64"
