@@ -1,0 +1,89 @@
+SUMMARY="Messaging app for business"
+DESCRIPTION="
+A collaboration platform, a work tool that allows you to communicate with your team more easily to carry out your daily tasks. 
+Slack is a professional "Messenger", an enterprise social network already adopted by millions of users including many teams of developers. 
+"
+HOMEPAGE="https://slack.com/"
+DOWNLOADS="https://downloads.slack-edge.com/releases/linux/${PV}/prod/x64/slack-desktop-${PV}-amd64.deb"
+
+LICENCES="all-rights-reserved"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="
+    wayland
+    seccomp [[ description = [ System call filtering support via seccomp ] ]]
+"
+
+DEPENDENCIES="
+    run:
+		dev-libs/atk
+		dev-libs/expat
+		dev-libs/glib
+		dev-libs/nspr
+		dev-libs/nss
+		net-print/cups
+		sys-apps/dbus
+		sys-sound/alsa-lib
+		x11-dri/libdrm
+		x11-dri/mesa
+		x11-libs/cairo
+		x11-libs/gdk-pixbuf
+		x11-libs/gtk+
+		x11-libs/libX11
+		x11-libs/libxcb
+		x11-libs/libXcomposite
+		x11-libs/libXdamage
+		x11-libs/libXext
+		x11-libs/libXfixes
+		x11-libs/libxkbcommon
+		x11-libs/libxkbfile
+		x11-libs/libXrandr
+		x11-libs/pango
+        wayland? ( sys-libs/wayland )
+"
+
+WORK=${WORKBASE}
+
+SLACK_LIB=(
+    "/usr/$(exhost --target)/lib/slack"
+)
+
+src_unpack() {
+    default
+    unpack ./data.tar.xz
+    edo rm -f control.tar.xz data.tar.xz debian-binary _gpgorigin
+}
+
+src_prepare() {
+    # Start slack with daemon
+    edo sed -i -e '/Exec/s|slack|slack -s|' usr/share/applications/slack.desktop 
+
+    if ! optionq seccomp; then
+        edo sed -i '/Exec/s/%U/%U --disable-seccomp-filter-sandbox/' usr/share/applications/slack.desktop 
+    fi 
+
+    if optionq wayland; then
+        edo sed -i '/Exec/s/%U/%U --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WebRTCPipeWireCapturer/' usr/share/applications/slack.desktop 
+    fi 
+}
+
+src_install() {
+    insinto /usr/$(exhost --target)/bin
+    doins usr/bin/slack
+    
+    dodir ${SLACK_LIB}
+    insinto ${SLACK_LIB}
+    edo rm usr/lib/slack/LICENSES-linux.json
+    doins -r usr/lib/slack/*
+
+    edo chmod 755 "${IMAGE}${SLACK_LIB}"/slack
+    edo chmod 755 "${IMAGE}${SLACK_LIB}"/*.so
+    edo chmod 755 "${IMAGE}${SLACK_LIB}"/*so.1
+    edo chmod 755 "${IMAGE}${SLACK_LIB}"/chrome-sandbox
+    edo chmod 755 "${IMAGE}${SLACK_LIB}"/chrome_crashpad_handler
+    
+    insinto /usr/share/applications
+    doins usr/share/applications/slack.desktop
+    insinto /usr/share/pixmaps
+    doins usr/share/pixmaps/slack.png
+}
