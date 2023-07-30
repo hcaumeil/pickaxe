@@ -1,0 +1,5 @@
+GITHUB_TAG="v${PV}"
+
+require typst
+
+PLATFORMS="~amd64"

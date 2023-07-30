@@ -1,0 +1,44 @@
+require cargo github [ user='typst' ]
+require bash-completion zsh-completion
+
+export_exlib_phases src_install src_compile
+
+SUMMARY="a new markup-based typesetting system that is designed to be as powerful as LaTeX while being much easier to learn and use."
+LICENCES="Apache-2.0"
+SLOT="0"
+MYOPTIONS="
+    fish-completion [[ description = [ Install completion files for the fish shell ] ]]
+"
+
+DEPENDENCIES="
+	dev-libs/openssl
+"
+
+BASH_COMPLETIONS=(
+    "./cli/${PN}.bash _${PN}"
+)
+
+ZSH_COMPLETIONS=(
+    "./cli/${PN}.zsh _${PN}"
+)
+
+typst_src_compile() {
+	export GEN_ARTIFACTS=.
+    cargo_src_compile
+}
+
+typst_src_install() {
+    exeinto /usr/$(exhost --target)/bin
+    doexe target/x86_64-unknown-linux-gnu/release/typst
+
+	doman ./cli/*.1
+
+    bash-completion_src_install
+    zsh-completion_src_install
+
+    if optionq fish-completion; then
+        insinto /usr/share/fish/vendor_completions.d/
+        doins ./cli/${PN}.fish
+    fi
+}
+
