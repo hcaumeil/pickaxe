@@ -37,14 +37,22 @@ HELIX_RUNTIME=(
 )
 
 COMPILED_BIN=(
-    "target/release/hx"
+    "target/release/$(exhost --target)/hx"
 )
 
 helix_src_install() {
     ebegin "Installing binary"
     dodir ${HELIX_DIR}
-    exeinto ${HELIX_DIR}
-    doexe ${COMPILED_BIN}
+
+    ecargo install --path=./helix-term --root="${IMAGE}/${HELIX_DIR}" --frozen
+    nonfatal edo rm "${IMAGE}/${HELIX_DIR}/.crates.toml"
+    nonfatal edo rm "${IMAGE}/${HELIX_DIR}/.crates2.json"
+
+    pushd .
+    cd ${IMAGE}/${HELIX_DIR}
+    mv bin/hx .
+    rm -fr bin
+    popd    
     eend
 
     # Installing helix runtime (helix tutor, color themes, tree-sitter queries, tree-sitter grammars)
