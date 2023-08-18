@@ -6,5 +6,6 @@ SLOT="0"
 MYOPTIONS=""
 
 DEPENDENCIES="
-	dev-libs/openssl
+	build+run:
+		dev-libs/openssl:=[>=1.1.0]
 "
