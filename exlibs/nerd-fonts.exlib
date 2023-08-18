@@ -8,7 +8,7 @@ export_exlib_phases src_prepare src_install
 
 SUMMARY="The iconic ${FONT} nerd font (with a high number of glyphs/icons)"
 HOMEPAGE="https://www.nerdfonts.com/"
-LICENCES="OFL-SIL"
+LICENCES="OFL-1.0"
 SLOT="0"
 
 # Because github exlib overide it
