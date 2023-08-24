@@ -11,15 +11,16 @@ MYOPTIONS="
 "
 
 DEPENDENCIES="
-	dev-libs/openssl
+	build+run:
+		dev-libs/openssl:=[>=1.1.0]
 "
 
 BASH_COMPLETIONS=(
-    "./cli/${PN}.bash _${PN}"
+    "crates/typst-cli/${PN}.bash _${PN}"
 )
 
 ZSH_COMPLETIONS=(
-    "./cli/${PN}.zsh _${PN}"
+    "crates/typst-cli/${PN}.zsh _${PN}"
 )
 
 typst_src_compile() {
@@ -31,7 +32,7 @@ typst_src_install() {
     exeinto /usr/$(exhost --target)/bin
     doexe target/x86_64-unknown-linux-gnu/release/typst
 
-	doman ./cli/*.1
+	doman crates/typst-cli/*.1
 
     bash-completion_src_install
     zsh-completion_src_install
