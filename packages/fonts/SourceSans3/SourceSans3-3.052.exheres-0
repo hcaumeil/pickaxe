@@ -1,0 +1,22 @@
+require github [ user='adobe-fonts' project='source-sans' tag=${PV}R ] xfont
+
+SUMMARY="OpenType fonts that have been designed to work well in UI environments. (formerly SourceSansPro)."
+HOMEPAGE="https://adobe-fonts.github.io/source-sans/"
+PLATFORMS="~amd64 ~arm ~armv8 ~x86"
+LICENCES="OFL-1.0"
+SLOT="0"
+
+DEPENDENCIES=""
+
+src_install() {
+	dodir /usr/share/fonts/X11/${PN}/
+	insinto /usr/share/fonts/X11/${PN}/
+	doins TTF/*.ttf
+
+    insinto /usr/share/fontconfig/conf.avail
+    doins "${FILES}"/65-${PN}.conf
+
+    # Enable by default
+    dodir /etc/fonts/conf.d
+    edo ln -sf /usr/share/fontconfig/conf.avail/65-${PN}.conf "${IMAGE}"/etc/fonts/conf.d/65-${PN}.conf
+}
