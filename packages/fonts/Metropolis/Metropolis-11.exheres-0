@@ -1,0 +1,14 @@
+require github [ user='dw5' tag=r${PV} ] xfont
+
+SUMMARY="A modern, geometric typeface."
+PLATFORMS="~amd64 ~arm ~armv8 ~x86"
+LICENCES="Unlicense"
+SLOT="0"
+
+DEPENDENCIES=""
+
+src_install() {
+	dodir /usr/share/fonts/X11/${PN}/
+	insinto /usr/share/fonts/X11/${PN}/
+	doins Fonts/TrueType/*.ttf
+}
