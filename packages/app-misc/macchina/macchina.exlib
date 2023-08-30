@@ -1,0 +1,33 @@
+require cargo github [ user='Macchina-CLI' tag=v${PV} ]
+
+export_exlib_phases pkg_setup src_install
+
+SUMMARY="Fast, minimal and customizable system information frontend."
+DESCRIPTION="
+macchina lets you view system information, like your kernel version, uptime, memory usage, processor load and much more. 
+(basically a rust neofetch).
+"
+LICENCES="MIT"
+SLOT="0"
+MYOPTIONS="
+    openwrt [[ description = [ openwrt support ] ]]
+"
+
+DEPENDENCIES=""
+
+macchina_pkg_setup() {
+    if optionq openwrt; then
+        ECARGO_FEATURES=( openwrt )
+    fi
+}
+
+macchina_src_install() {
+    cargo_src_install
+    
+    insinto /usr/share/${PN}/
+    doins -r contrib/themes
+
+    doman doc/macchina.1
+    doman doc/macchina.7
+}
+
