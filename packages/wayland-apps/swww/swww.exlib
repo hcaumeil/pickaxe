@@ -1,0 +1,35 @@
+require bash-completion
+require cargo github [ user='Horus645' tag=v${PV} ]
+
+export_exlib_phases src_install
+
+SUMMARY="Efficient animated wallpaper daemon for wayland, controlled at runtime."
+LICENCES="GPL-3"
+SLOT="0"
+MYOPTIONS=""
+DEPENDENCIES=""
+
+MYOPTIONS="
+    fish-completion [[ description = [ Install completion files for the fish shell ] ]]
+"
+
+BASH_COMPLETIONS=(
+    "completions/${PN}.bash _${PN}"
+)
+
+swww_src_install() {
+    ecargo install --path=. --root="${IMAGE}/usr/$(exhost --target)" --frozen
+    ecargo install --path=./daemon --root="${IMAGE}/usr/$(exhost --target)" --frozen
+    nonfatal edo rm "${IMAGE}/usr/$(exhost --target)/.crates.toml"
+    nonfatal edo rm "${IMAGE}/usr/$(exhost --target)/.crates2.json"  
+
+    bash-completion_src_install
+
+    if optionq fish-completion; then
+        insinto /usr/share/fish/vendor_completions.d/
+        doins completions/${PN}.fish
+    fi
+        
+    ./doc/gen.sh
+    doman doc/generated/*
+}
