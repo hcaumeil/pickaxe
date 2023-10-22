@@ -1,0 +1,25 @@
+SCM_wlrprotocols_REPOSITORY="https://gitlab.freedesktop.org/wlroots/wlr-protocols"
+SCM_waylandprotocols_REPOSITORY="https://gitlab.freedesktop.org/wayland/wayland-protocols"
+
+SCM_SECONDARY_REPOSITORIES="wlrprotocols waylandprotocols"
+SCM_EXTERNAL_REFS="proto/wlr-protocols:wlrprotocols proto/wayland-protocols:waylandprotocols"
+
+require github [ user="Ferdi265" tag=v${PV} force_git_clone=true ]
+require cmake
+
+PLATFORMS="~amd64 ~arm ~armv8 ~x86"
+
+SUMMARY="A simple Wayland output mirror client "
+LICENCES="GPL-3"
+SLOT="0"
+
+DEPENDENCIES="
+    build+run:
+        sys-libs/wayland
+    build:
+        app-doc/scdoc
+"
+
+CMAKE_SRC_CONFIGURE_PARAMS=(
+    "-DINSTALL_DOCUMENTATION=ON"
+)
