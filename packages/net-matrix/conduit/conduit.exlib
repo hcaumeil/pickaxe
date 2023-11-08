@@ -1,0 +1,46 @@
+require systemd-service
+require cargo
+require gitlab [ user='famedly' tag=v${PV} new_download_scheme=true ] 
+
+export_exlib_phases src_unpack src_install pkg_postinst
+
+SUMMARY="Conduit is a simple, fast and reliable chat server powered by Matrix, written in rust"
+LICENCES="Apache-2.0"
+SLOT="0"
+MYOPTIONS=""
+
+WORK="${WORKBASE}/${PN}-v${PV}"
+
+DEPENDENCIES="
+    build:
+         dev-lang/clang
+	run:
+		group/${PN}
+        user/${PN}
+"
+
+conduit_src_unpack() {
+	gitlab_src_unpack
+	cargo_src_unpack
+}
+
+conduit_src_install() {
+	cargo_src_install
+
+	install_systemd_files
+}
+
+conduit_pkg_postinst() {
+	if [ ! -d /etc/matrix-conduit ] ; then
+		mkdir -p /etc/matrix-conduit
+		cp ${FILES}/conduit.toml /etc/matrix-conduit/conduit.toml
+		chown -R root:root /etc/matrix-conduit
+		chmod 755 /etc/matrix-conduit
+	fi
+
+	if [ ! -d /var/lib/matrix-conduit ] ; then 
+		mkdir -p /var/lib/matrix-conduit/ 
+		chown -R conduit:conduit /var/lib/matrix-conduit/
+		chmod 700 /var/lib/matrix-conduit/	
+	fi 
+}
