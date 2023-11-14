@@ -1,0 +1,6 @@
+GITHUB_REVISION="f2fc8af7ab58d2123eed1aa4428e713cdfc27976"
+
+require rtl8192eu
+
+PLATFORMS="~amd64"
+

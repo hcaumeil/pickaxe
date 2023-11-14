@@ -1,0 +1,54 @@
+require github [ user="Mange" project="rtl8192eu-linux-driver" ]
+
+export_exlib_phases src_configure src_compile src_install pkg_postinst
+
+SUMMARY="Driver for Realtek 8192eu chipset (DKMS)"
+LICENCES="GPL-2"
+SLOT="0"
+MYOPTIONS=""
+DEPENDENCIES="
+    run:
+        sys-kernel/dkms
+"
+
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/${PN}.patch
+)
+
+rtl8192eu_src_configure() {
+        :
+}
+
+rtl8192eu_src_compile() {
+        :
+}
+
+rtl8192eu_src_install() {
+    sed -e "s/^PACKAGE_NOME=.*/PACKAGE_NOME=\"${PN}\"/" \
+        -e "s/^PACKAGE_VERSION=.*/PACKAGE_VERSION=\"${PV}\"/" \
+        -e '/^REMAKE_INITRD=.*/d' \
+        -i "dkms.conf"
+
+    sed '/^MAKE/d' -i dkms.conf
+
+    make_cmd='MAKE="'
+    make_cmd+="'make' " 
+    make_cmd+='all KVER=${kernelver} '
+    make_cmd+="CC=$(exhost --build)-cc "
+    make_cmd+="LD=$(exhost --build)-ld"
+    make_cmd+='"'
+    echo $make_cmd >> dkms.conf
+
+    insinto "/usr/src/${PNV}"
+    doins -r *
+
+	insinto "/usr/$(exhost --target)/lib/modprobe.d/"
+	doins ${FILES}/${PN}.conf
+}
+
+rtl8192eu_pkg_postinst() {
+   cd /usr/src/${PNV} 
+   dkms add . > /dev/null 2>&1
+   export CC=$(exhost --build)-cc
+   edo dkms install "${PN}/${PV}"
+}
