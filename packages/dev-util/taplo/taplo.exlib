@@ -1,6 +1,6 @@
 require cargo github [ user='tamasfe' ]
 
-export_exlib_phases pkg_setup src_compile src_install
+export_exlib_phases src_compile src_install
 
 SUMMARY="A TOML toolkit written in Rust"
 DESCRIPTION="
@@ -15,11 +15,9 @@ MYOPTIONS="
 
 DEPENDENCIES=""
 
-taplo_pkg_setup() {
-    if optionq lsp; then
-        ECARGO_FEATURES=( lsp )
-    fi
-}
+ECARGO_FEATURE_ENABLES=(
+    'lsp lsp'
+)
 
 taplo_src_compile() {
     ecargo build -p taplo-cli --release --frozen
