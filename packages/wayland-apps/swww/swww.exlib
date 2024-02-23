@@ -1,5 +1,5 @@
 require bash-completion
-require cargo github [ user='Horus645' tag=v${PV} ]
+require cargo github [ user='LGFae' tag=v${PV} ]
 
 export_exlib_phases src_install
 
