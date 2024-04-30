@@ -55,15 +55,12 @@ src_unpack() {
 }
 
 src_prepare() {
-    # Start slack with daemon
-    edo sed -i -e '/Exec/s|slack|slack -s|' usr/share/applications/slack.desktop 
-
     if ! optionq seccomp; then
-        edo sed -i '/Exec/s/%U/%U --disable-seccomp-filter-sandbox/' usr/share/applications/slack.desktop 
+        edo sed -i '/Exec/s/%U/ --disable-seccomp-filter-sandbox/' usr/share/applications/slack.desktop 
     fi 
 
     if optionq wayland; then
-        edo sed -i '/Exec/s/%U/%U --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WebRTCPipeWireCapturer/' usr/share/applications/slack.desktop 
+        edo sed -i '/Exec/s/%U/ --enable-features=UseOzonePlatform --ozone-platform=wayland/' usr/share/applications/slack.desktop 
     fi 
 }
 
