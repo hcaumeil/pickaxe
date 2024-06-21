@@ -7,7 +7,10 @@ SUMMARY="Efficient animated wallpaper daemon for wayland, controlled at runtime.
 LICENCES="GPL-3"
 SLOT="0"
 MYOPTIONS=""
-DEPENDENCIES=""
+DEPENDENCIES="
+    build+run:
+        app-arch/lz4
+"
 
 MYOPTIONS="
     fish-completion [[ description = [ Install completion files for the fish shell ] ]]
