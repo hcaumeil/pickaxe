@@ -19,21 +19,30 @@ MYOPTIONS="
 DEPENDENCIES=""
 
 BASH_COMPLETIONS=(
-    "completions/${PN}.bash _${PN}"
+    "${PN}.bash _${PN}"
 )
 
 ZSH_COMPLETIONS=(
-    "completions/${PN}.zsh _${PN}"
+    "${PN}.zsh _${PN}"
 )
 
 just_src_install() {
     cargo_src_install
 
+    if optionq bash-completion; then
+         edo ${IMAGE}/usr/$(exhost --target)/bin/${PN} --completions bash > ${PN}.bash
+    fi
+
+    if optionq zsh-completion; then
+         edo ${IMAGE}/usr/$(exhost --target)/bin/${PN} --completions zsh > ${PN}.zsh
+    fi
+
     bash-completion_src_install
     zsh-completion_src_install
 
     if optionq fish-completion; then
+        ${IMAGE}/usr/$(exhost --target)/bin/${PN} --completions fish > ${PN}.fish
         insinto /usr/share/fish/vendor_completions.d/
-        doins completions/${PN}.fish
+        doins ${PN}.fish
     fi
 }
