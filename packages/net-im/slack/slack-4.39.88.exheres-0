@@ -4,7 +4,7 @@ A collaboration platform, a work tool that allows you to communicate with your t
 Slack is a professional "Messenger", an enterprise social network already adopted by millions of users including many teams of developers. 
 "
 HOMEPAGE="https://slack.com/"
-DOWNLOADS="https://downloads.slack-edge.com/releases/linux/${PV}/prod/x64/slack-desktop-${PV}-amd64.deb"
+DOWNLOADS="https://downloads.slack-edge.com/desktop-releases/linux/x64/${PV}/slack-desktop-${PV}-amd64.deb"
 
 LICENCES="all-rights-reserved"
 SLOT="0"
