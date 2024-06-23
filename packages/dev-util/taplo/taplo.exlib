@@ -1,12 +1,12 @@
-require cargo github [ user='tamasfe' ]
-
-export_exlib_phases src_compile src_install
+require cargo [ crate=${PN}-cli ]
 
 SUMMARY="A TOML toolkit written in Rust"
 DESCRIPTION="
 Taplo CLI aims to be an one stop shop tool for working with TOML files via the command line.
 The features include validation, formatting, and querying TOML documents with a jq-like fashion.
 "
+HOMEPAGE+="https://taplo.tamasfe.dev/"
+UPSTREAM_DOCUMENTATION="https://taplo.tamasfe.dev/cli/introduction.html [[ lang = en ]]"
 LICENCES="MIT"
 SLOT="0"
 MYOPTIONS="
@@ -18,14 +18,3 @@ DEPENDENCIES=""
 ECARGO_FEATURE_ENABLES=(
     'lsp lsp'
 )
-
-taplo_src_compile() {
-    ecargo build -p taplo-cli --release --frozen
-}
-
-
-taplo_src_install() {
-    exeinto /usr/$(exhost --target)/bin
-    doexe target/x86_64-unknown-linux-gnu/release/taplo
-}
-
