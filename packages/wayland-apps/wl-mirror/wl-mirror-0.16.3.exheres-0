@@ -12,14 +12,17 @@ PLATFORMS="~amd64 ~arm ~armv8 ~x86"
 SUMMARY="A simple Wayland output mirror client "
 LICENCES="GPL-3"
 SLOT="0"
+MYOPTIONS="
+    doc
+"
 
 DEPENDENCIES="
     build+run:
         sys-libs/wayland
     build:
-        app-doc/scdoc
+        doc? ( app-doc/scdoc )
 "
 
-CMAKE_SRC_CONFIGURE_PARAMS=(
-    "-DINSTALL_DOCUMENTATION=ON"
+CMAKE_SRC_CONFIGURE_OPTIONS=(
+    "doc INSTALL_DOCUMENTATION"
 )
