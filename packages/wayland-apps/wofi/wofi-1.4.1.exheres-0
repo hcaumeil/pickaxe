@@ -14,10 +14,7 @@ DEPENDENCIES="
         x11-libs/gtk
 "
 
-src_prepare() {
-    MESON_SOURCE="${WORKBASE}/${PN}-v${PV}"
-    meson_src_prepare
-}
+MESON_SOURCE="${WORKBASE}/${PN}-v${PV}"
 
 pkg_postinst() {
         einfo ""
