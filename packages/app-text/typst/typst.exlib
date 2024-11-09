@@ -5,6 +5,8 @@ export_exlib_phases src_install src_compile
 
 SUMMARY="a new markup-based typesetting system that is designed to be as powerful as LaTeX while being much easier to learn and use."
 LICENCES="Apache-2.0"
+HOMEPAGE+="
+https://typst.app/"
 SLOT="0"
 MYOPTIONS="
     fish-completion [[ description = [ Install completion files for the fish shell ] ]]
