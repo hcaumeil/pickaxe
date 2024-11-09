@@ -5,7 +5,8 @@ DESCRIPTION="
 Taplo CLI aims to be an one stop shop tool for working with TOML files via the command line.
 The features include validation, formatting, and querying TOML documents with a jq-like fashion.
 "
-HOMEPAGE+="https://taplo.tamasfe.dev/"
+HOMEPAGE+="
+https://taplo.tamasfe.dev"
 UPSTREAM_DOCUMENTATION="https://taplo.tamasfe.dev/cli/introduction.html [[ lang = en ]]"
 LICENCES="MIT"
 SLOT="0"
