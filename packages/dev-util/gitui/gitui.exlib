@@ -1,4 +1,4 @@
-require cargo github [ user='extrawurst' ]
+require cargo github [ user='gitui-org' ]
 
 SUMMARY="Text-mode interface for git, written in rust"
 LICENCES="CC0"
